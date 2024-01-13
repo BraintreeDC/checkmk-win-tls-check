@@ -109,7 +109,7 @@ register.check_plugin(
     discovery_function=discovery_win_tls_status,
     check_function=check_win_tls_status,
     check_default_parameters={
-        'protocols': [('TLS1_3', '1', '1'),
+        'protocols': [('TLS1_3', 'ignore', 'ignore'),
                      ('TLS1_2', '1', '1'),
                      ('TLS1_1', '0', '0'),
                      ('TLS1_0', '0', '0')]
