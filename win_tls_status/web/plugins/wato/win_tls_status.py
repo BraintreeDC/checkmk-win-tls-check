@@ -34,7 +34,7 @@ from cmk.gui.plugins.wato.utils import (
 
 def _parameter_valuespec_win_tls_status():
     return Dictionary(
-        title=_('Time left for installed certificates before renew.'),
+        title=_('Configure the desired state for each TLS protocol.'),
         elements=[
             ("protocols",
              ListOf(
@@ -45,7 +45,7 @@ def _parameter_valuespec_win_tls_status():
                      ),
                      DropdownChoice(
                          title=_("Client State"),
-                         help=_("Default behaviour for the client tls state."),
+                         help=_("Default behaviour for the client tls state. 0 = Disabled, 1 = Enabled."),
                          choices=[
                              ("0", _("0")),
                              ("1", _("1")),
@@ -54,7 +54,7 @@ def _parameter_valuespec_win_tls_status():
                      ),
                      DropdownChoice(
                          title=_("Server State"),
-                         help=_("Default behaviour for the server tls state."),
+                         help=_("Default behaviour for the server tls state. 0 = Disabled, 1 = Enabled."),
                          choices=[
                              ("0", _("0")),
                              ("1", _("1")),
