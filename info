@@ -1,0 +1,50 @@
+{
+    "author": "Braintree District Council",
+    "description": "This Plugin checks for the TLS Settings (SCHANNEL) of Windows "
+    "machines. To go for sure you can check and set the TLS "
+    "Settings with IISCrypto -> "
+    "https://www.nartac.com/Products/IISCrypto\n"
+    "\n"
+    "Setup:\n"
+    "\n"
+    "Install the MKP\n"
+    "Deploy the Plugin via Bakery\n"
+    "Maybe adjust your requirements via the normal Service Rule\n"
+    "\n"
+    "Assuming:\n"
+    "\n"
+    "Windows Server 2022 has enabled TLS 1.3 by default.\n"
+    "Windows Server <2022 do not support TLS 1.3.\n"
+    "\n"
+    "Default Warning levels:\n"
+    "\n"
+    "TLS 1.3 -> Ignored\n"
+    "TLS 1.2 -> Client + Serverside = Enabled\n"
+    "TLS 1.1 -> Client + Serverside = Should be Disabled\n"
+    "TLS 1.0 -> Client + Serverside = Should be Disabled\n"
+    "\n"
+    "Sample Output:\n"
+    "\n"
+    "protocol TLS1_3 as expected (S:0❘C:0)\n"
+    "protocol TLS1_2 as expected (S:1❘C:1)\n"
+    "protocol TLS1_1 (server) is not as expected 0 vs. 1WARN\n"
+    "protocol TLS1_1 (client) is not as expected 0 vs. 1WARN\n"
+    "protocol TLS1_0 (server) is not as expected 0 vs. 1WARN\n"
+    "protocol TLS1_0 (client) is not as expected 0 vs. 1WARN\n",
+    "download_url": "https://github.com/BraintreeDC/checkmk-win-tls-status",
+    "files": {
+        "agents": ["windows/plugins/win_tls_status.ps1"],
+        "cmk_addons_plugins": [
+            "win_tls_status/agent_based/win_tls_status.py",
+            "win_tls_status/rulesets/win_tls_status.py",
+            "win_tls_status/rulesets/win_tls_status_cee.py",
+        ],
+        "lib": ["check_mk/base/cee/plugins/bakery/win_tls_status.py"],
+    },
+    "name": "win_tls_status",
+    "title": "Windows TLS Status",
+    "version": "2.0.0",
+    "version.min_required": "2.3.0b1",
+    "version.packaged": "2.4.0",
+    "version.usable_until": None,
+}

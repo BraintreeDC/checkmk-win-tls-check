@@ -19,11 +19,18 @@
 from pathlib import Path
 from typing import Any, Dict
 
-from cmk.base.cee.plugins.bakery.bakery_api.v1 import FileGenerator, OS, Plugin, register
+from cmk.base.cee.plugins.bakery.bakery_api.v1 import (
+    FileGenerator,
+    OS,
+    Plugin,
+    register,
+)
 
 
 def get_win_tls_status_files(conf: Dict[str, Any]) -> FileGenerator:
-    '''select and integrate plugin into agent'''
+    """select and integrate plugin into agent"""
+    if not conf:
+        return
     yield Plugin(base_os=OS.WINDOWS, source=Path("win_tls_status.ps1"))
 
 

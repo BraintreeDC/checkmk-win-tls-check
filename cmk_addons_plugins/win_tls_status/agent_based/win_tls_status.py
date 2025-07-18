@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-'''Windows TLS status check'''
+"""Windows TLS status check"""
 # -*- encoding: utf-8; py-indent-offset: 4 -*-
 
 # (c) Constantin Lotz <checkmk@constey.de>
@@ -19,32 +19,30 @@
 
 # Example Output:
 
-#<<<win_tls_status:sep(125)>>>
-#Protocol|Server|Client
-#TLS1_3|1|1
-#TLS1_2|1|1
-#TLS1_1|1|1
-#TLS1_0|1|1
+# <<<win_tls_status:sep(125)>>>
+# Protocol|Server|Client
+# TLS1_3|1|1
+# TLS1_2|1|1
+# TLS1_1|1|1
+# TLS1_0|1|1
 
 from typing import Any, Dict, Tuple
-from cmk.base.plugins.agent_based.agent_based_api.v1.type_defs import (
+from cmk.agent_based.v2 import (
+    AgentSection,
+    CheckPlugin,
     CheckResult,
     DiscoveryResult,
-    StringTable,
-)
-
-from cmk.base.plugins.agent_based.agent_based_api.v1 import (
-    register,
     Result,
     State,
     Service,
+    StringTable,
 )
 
 Section = Dict[str, Any]
 
 
 def parse_win_tls_status(string_table: StringTable) -> Section:
-    '''parse raw data into dictionary'''
+    """parse raw data into dictionary"""
     key = "Protocol"
     parsed = {}
     for i in string_table[1:]:
@@ -54,65 +52,71 @@ def parse_win_tls_status(string_table: StringTable) -> Section:
     return parsed
 
 
-register.agent_section(
+agent_section_win_tls_status = AgentSection(
     name="win_tls_status",
     parse_function=parse_win_tls_status,
 )
 
 
 def discovery_win_tls_status(section: Section) -> DiscoveryResult:
-    '''if data is present discover service'''
+    """if data is present discover service"""
     if section:
         yield Service()
 
 
-def _get_params(params: Dict[str, Any], protocol) -> Tuple:
+def _get_params(params: Dict[str, Any], protocol) -> Dict[str, any]:
     for element in params.get("protocols", []):
         if not element:
             continue
-        if element[0] == protocol:
+        if element.get("protocol") == protocol:
             return element
-    return (None, None, None)
-    #return (None, None, None, None)
+    return {"protocol": None, "server": None, "client": None}
 
 
 def check_win_tls_status(params: Dict[str, Any], section: Section) -> CheckResult:
-    '''check the tls state compared to params'''
+    """check the tls state compared to params"""
     for key, data in section.items():
-        _protocol, server, client = _get_params(params, key)
+        profile_params = _get_params(params, key)
         state = 0
         server_active = data.get("Server")
         client_active = data.get("Client")
+        server = profile_params.get("server")
+        client = profile_params.get("client")
 
         if (server != "ignore") and (server != server_active):
             state = max(state, 1)
             yield Result(
                 state=State.WARN,
-                summary=
-                f"protocol {key} (server) is not as expected {server} vs. {server_active}")
+                summary=f"protocol {key} (server) is not as expected {server} vs. {server_active}",
+            )
 
         if (client != "ignore") and (client != client_active):
             state = max(state, 1)
             yield Result(
                 state=State.WARN,
-                summary=
-                f"protocol {key} (client) is not as expected {client} vs. {client_active}")
+                summary=f"protocol {key} (client) is not as expected {client} vs. {client_active}",
+            )
 
-        if (state == 0 or server == "ignore" or client == "ignore"):
-            yield Result(state=State.OK, summary=f"protocol {key} as expected (S:{server_active}|C:{client_active})")
+        if state == 0 or server == "ignore" or client == "ignore":
+            yield Result(
+                state=State.OK,
+                summary=f"protocol {key} as expected (S:{server_active}|C:{client_active})",
+            )
 
 
-register.check_plugin(
+check_plugin_win_tls_status = CheckPlugin(
     name="win_tls_status",
     service_name="Windows TLS Status",
     sections=["win_tls_status"],
     discovery_function=discovery_win_tls_status,
     check_function=check_win_tls_status,
     check_default_parameters={
-        'protocols': [('TLS1_3', 'ignore', 'ignore'),
-                     ('TLS1_2', '1', '1'),
-                     ('TLS1_1', '0', '0'),
-                     ('TLS1_0', '0', '0')]
+        "protocols": [
+            {"protocol": "TLS1_3", "server": "ignore", "client": "ignore"},
+            {"protocol": "TLS1_2", "server": "ignore", "client": "ignore"},
+            {"protocol": "TLS1_1", "server": "ignore", "client": "ignore"},
+            {"protocol": "TLS1_0", "server": "ignore", "client": "ignore"},
+        ]
     },
     check_ruleset_name="win_tls_status",
 )
