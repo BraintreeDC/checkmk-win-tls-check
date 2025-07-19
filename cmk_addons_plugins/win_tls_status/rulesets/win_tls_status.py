@@ -11,7 +11,7 @@ from cmk.rulesets.v1.form_specs import (
     List,
     SingleChoice,
     SingleChoiceElement,
-    String
+    String,
 )
 from cmk.rulesets.v1.rule_specs import CheckParameters, HostCondition, Topic
 
@@ -30,8 +30,8 @@ def _parameter_valuespec_win_tls_status():
                     no_element_label=Label("No protocol selected"),
                     element_template=Dictionary(
                         elements={
-                            "protocol": SingleChoice(
-                                parameter_form=String(
+                            "protocol": DictElement(
+                                parameter_form=SingleChoice(
                                     title=Title("Protocol"),
                                     elements=[
                                         SingleChoiceElement(
@@ -60,11 +60,11 @@ def _parameter_valuespec_win_tls_status():
                                     help_text=Help("Expected state for server TLS"),
                                     elements=[
                                         SingleChoiceElement(
-                                            name="0",
+                                            name="disabled",
                                             title=Title("Disabled"),
                                         ),
                                         SingleChoiceElement(
-                                            name="1",
+                                            name="enabled",
                                             title=Title("Enabled"),
                                         ),
                                         SingleChoiceElement(
@@ -80,11 +80,11 @@ def _parameter_valuespec_win_tls_status():
                                     help_text=Help("Expected state for client TLS"),
                                     elements=[
                                         SingleChoiceElement(
-                                            name="0",
+                                            name="disabled",
                                             title=Title("Disabled"),
                                         ),
                                         SingleChoiceElement(
-                                            name="1",
+                                            name="enabled",
                                             title=Title("Enabled"),
                                         ),
                                         SingleChoiceElement(

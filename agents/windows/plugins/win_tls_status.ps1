@@ -25,11 +25,11 @@ Function Get-RegValue {
         $RegName
     )
     $regItem = Get-ItemProperty -Path $RegPath -Name $RegName -ErrorAction Ignore
-    $output = "" | select Path, Name, Value
+    $output = "" | Select-Object Path, Name, Value
     $output.Path = $RegPath
     $output.Name = $RegName
 
-    If ($regItem -eq $null) {
+    If ($null -eq $regItem) {
         $output.Value = "-1" #Not Found
     }
     Else {
@@ -67,15 +67,15 @@ $regSettings += Get-RegValue $regKey 'DisabledByDefault'
 if ((Get-RegValue $regKey 'Enabled').Value -eq "-1" -and
     (Get-RegValue $regKey 'DisabledByDefault').Value -eq "-1") { 
         # Windows 11 = Default ON
-        $tls12s = 1
+        $tls12s = 'enabled'
  } elseif ((Get-RegValue $regKey 'Enabled').Value -ge "1" -and
            (Get-RegValue $regKey 'DisabledByDefault').Value -ne "1") { 
         # Manually turned on
-        $tls12s = 1
+        $tls12s = 'enabled'
  } elseif ((Get-RegValue $regKey 'Enabled').Value  -eq "0" -and 
            (Get-RegValue $regKey 'DisabledByDefault').Value  -eq "1") { 
         # Off
-        $tls12s = 0
+        $tls12s = 'disabled'
  } else {
     # Unknown
     $tls12s = 3
@@ -87,15 +87,15 @@ $regSettings += Get-RegValue $regKey 'DisabledByDefault'
 if ((Get-RegValue $regKey 'Enabled').Value -eq "-1" -and
     (Get-RegValue $regKey 'DisabledByDefault').Value -eq "-1") { 
         # Windows 11 = Default ON
-        $tls12c = 1
+        $tls12c = 'enabled'
  } elseif ((Get-RegValue $regKey 'Enabled').Value -ge "1" -and
            (Get-RegValue $regKey 'DisabledByDefault').Value -ne "1") { 
         # Manually turned on
-        $tls12c = 1
+        $tls12c = 'enabled'
  } elseif ((Get-RegValue $regKey 'Enabled').Value  -eq "0" -and 
            (Get-RegValue $regKey 'DisabledByDefault').Value  -eq "1") { 
         # Off
-        $tls12c = 0
+        $tls12c = 'disabled'
  } else {
     # Unknown
     $tls12c = 3
@@ -108,15 +108,15 @@ $regSettings += Get-RegValue $regKey 'DisabledByDefault'
 if ((Get-RegValue $regKey 'Enabled').Value -eq "-1" -and
     (Get-RegValue $regKey 'DisabledByDefault').Value -eq "-1") { 
         # Windows 11 = Default ON
-        $tls11s = 1
+        $tls11s = 'enabled'
  } elseif ((Get-RegValue $regKey 'Enabled').Value -ge "1" -and
            (Get-RegValue $regKey 'DisabledByDefault').Value -ne "1") { 
         # Manually turned on
-        $tls11s = 1
+        $tls11s = 'enabled'
  } elseif ((Get-RegValue $regKey 'Enabled').Value  -eq "0" -and 
            (Get-RegValue $regKey 'DisabledByDefault').Value  -eq "1") { 
         # Off
-        $tls11s = 0
+        $tls11s = 'disabled'
  } else {
     # Unknown
     $tls11s = 3
@@ -128,15 +128,15 @@ $regSettings += Get-RegValue $regKey 'DisabledByDefault'
 if ((Get-RegValue $regKey 'Enabled').Value -eq "-1" -and
     (Get-RegValue $regKey 'DisabledByDefault').Value -eq "-1") { 
         # Windows 11 = Default ON
-        $tls11c = 1
+        $tls11c = 'enabled'
  } elseif ((Get-RegValue $regKey 'Enabled').Value -ge "1" -and
            (Get-RegValue $regKey 'DisabledByDefault').Value -ne "1") { 
         # Manually turned on
-        $tls11c = 1
+        $tls11c = 'enabled'
  } elseif ((Get-RegValue $regKey 'Enabled').Value  -eq "0" -and 
            (Get-RegValue $regKey 'DisabledByDefault').Value  -eq "1") { 
         # Off
-        $tls11c = 0
+        $tls11c = 'disabled'
  } else {
     # Unknown
     $tls11c = 3
@@ -148,15 +148,15 @@ $regSettings += Get-RegValue $regKey 'DisabledByDefault'
 if ((Get-RegValue $regKey 'Enabled').Value -eq "-1" -and
     (Get-RegValue $regKey 'DisabledByDefault').Value -eq "-1") { 
         # Windows 11 = Default ON
-        $tls10s = 1
+        $tls10s = 'enabled'
  } elseif ((Get-RegValue $regKey 'Enabled').Value -ge "1" -and
            (Get-RegValue $regKey 'DisabledByDefault').Value -ne "1") { 
         # Manually turned on
-        $tls10s = 1
+        $tls10s = 'enabled'
  } elseif ((Get-RegValue $regKey 'Enabled').Value  -eq "0" -and 
            (Get-RegValue $regKey 'DisabledByDefault').Value  -eq "1") { 
         # Off
-        $tls10s = 0
+        $tls10s = 'disabled'
  } else {
     # Unknown
     $tls10s = 3
@@ -168,15 +168,15 @@ $regSettings += Get-RegValue $regKey 'DisabledByDefault'
 if ((Get-RegValue $regKey 'Enabled').Value -eq "-1" -and
     (Get-RegValue $regKey 'DisabledByDefault').Value -eq "-1") { 
         # Windows 11 = Default ON
-        $tls10c = 1
+        $tls10c = 'enabled'
  } elseif ((Get-RegValue $regKey 'Enabled').Value -ge "1" -and
            (Get-RegValue $regKey 'DisabledByDefault').Value -ne "1") { 
         # Manually turned on
-        $tls10c = 1
+        $tls10c = 'enabled'
  } elseif ((Get-RegValue $regKey 'Enabled').Value  -eq "0" -and 
            (Get-RegValue $regKey 'DisabledByDefault').Value  -eq "1") { 
         # Off
-        $tls10c = 0
+        $tls10c = 'disabled'
  } else {
     # Unknown
     $tls10c = 3
@@ -193,15 +193,15 @@ if ($osVersion -match "Server 2012" -or $osVersion -match "Server 2008" -or $osV
       (Get-RegValue $regKey 'DisabledByDefault').Value -eq "-1") { 
          # Not found # Windows 2008 = Default OFF
          # Windows 11 = Default ON
-         $tls13s = 0
+         $tls13s = 'disabled'
    } elseif ((Get-RegValue $regKey 'Enabled').Value -ge "1" -and
             (Get-RegValue $regKey 'DisabledByDefault').Value -ne "1") { 
          # Manually turned on
-         $tls13s = 1
+         $tls13s = 'enabled'
    } elseif ((Get-RegValue $regKey 'Enabled').Value  -eq "0" -and 
       (Get-RegValue $regKey 'DisabledByDefault').Value  -eq "1") { 
    # Off
-   $tls13s = 0
+   $tls13s = 'disabled'
    } else {
       # Unknown
       $tls13s = 3
@@ -214,15 +214,15 @@ if ($osVersion -match "Server 2012" -or $osVersion -match "Server 2008" -or $osV
    (Get-RegValue $regKey 'DisabledByDefault').Value -eq "-1") { 
       # Not found # Windows 2008 = Default OFF
       # Windows 11 = Default ON
-      $tls13c = 0
+      $tls13c = 'disabled'
    } elseif ((Get-RegValue $regKey 'Enabled').Value -ge "1" -and
             (Get-RegValue $regKey 'DisabledByDefault').Value -ne "1") { 
          # Manually turned on
-         $tls13c = 1
+         $tls13c = 'enabled'
    } elseif ((Get-RegValue $regKey 'Enabled').Value  -eq "0" -and 
       (Get-RegValue $regKey 'DisabledByDefault').Value  -eq "1") { 
    # Off
-   $tls13c = 0
+   $tls13c = 'disabled'
    } else {
       # Unknown
       $tls13c = 3
@@ -238,15 +238,15 @@ if ($osVersion -match "Windows 11" -or $osVersion -match "Server 2022") {
    if ((Get-RegValue $regKey 'Enabled').Value -eq "-1" -and
        (Get-RegValue $regKey 'DisabledByDefault').Value -eq "-1") { 
            # Windows 11 = Default ON
-           $tls13s = 1
+           $tls13s = 'enabled'
     } elseif ((Get-RegValue $regKey 'Enabled').Value -ge "1" -and
               (Get-RegValue $regKey 'DisabledByDefault').Value -ne "1") { 
            # Manually turned on
-           $tls13s = 1
+           $tls13s = 'enabled'
     } elseif ((Get-RegValue $regKey 'Enabled').Value  -eq "0" -and 
               (Get-RegValue $regKey 'DisabledByDefault').Value  -eq "1") { 
            # Off
-           $tls13s = 0
+           $tls13s = 'disabled'
     } else {
        # Unknown
        $tls13s = 3
@@ -258,15 +258,15 @@ if ($osVersion -match "Windows 11" -or $osVersion -match "Server 2022") {
    if ((Get-RegValue $regKey 'Enabled').Value -eq "-1" -and
        (Get-RegValue $regKey 'DisabledByDefault').Value -eq "-1") { 
            # Windows 11 = Default ON
-           $tls13c = 1
+           $tls13c = 'enabled'
     } elseif ((Get-RegValue $regKey 'Enabled').Value -ge "1" -and
               (Get-RegValue $regKey 'DisabledByDefault').Value -ne "1") { 
            # Manually turned on
-           $tls13c = 1
+           $tls13c = 'enabled'
     } elseif ((Get-RegValue $regKey 'Enabled').Value  -eq "0" -and 
               (Get-RegValue $regKey 'DisabledByDefault').Value  -eq "1") { 
            # Off
-           $tls13c = 0
+           $tls13c = 'disabled'
     } else {
        # Unknown
        $tls13c = 3
