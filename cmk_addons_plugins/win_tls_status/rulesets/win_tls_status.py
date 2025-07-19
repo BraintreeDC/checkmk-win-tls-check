@@ -11,8 +11,7 @@ from cmk.rulesets.v1.form_specs import (
     List,
     SingleChoice,
     SingleChoiceElement,
-    String,
-    validators,
+    String
 )
 from cmk.rulesets.v1.rule_specs import CheckParameters, HostCondition, Topic
 
@@ -31,7 +30,7 @@ def _parameter_valuespec_win_tls_status():
                     no_element_label=Label("No protocol selected"),
                     element_template=Dictionary(
                         elements={
-                            "protocol": DictElement(
+                            "protocol": SingleChoice(
                                 parameter_form=String(
                                     title=Title("Protocol"),
                                     elements=[

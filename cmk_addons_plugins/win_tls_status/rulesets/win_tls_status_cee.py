@@ -15,7 +15,7 @@ from cmk.rulesets.v1.rule_specs import AgentConfig, Topic
 
 def _valuespec_agent_config_win_tls_status():
     return Dictionary(
-        title=Title("Windows tls Status"),
+        title=Title("Windows TLS Status"),
         help_text=Help(
             "This will deploy the agent plugin <tt>win_tlsl_status.ps1</tt> "
             "to check the Windows TLS state."
